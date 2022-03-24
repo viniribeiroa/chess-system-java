@@ -2,6 +2,7 @@ package chess;
 
 import boardgame.Board;
 import boardgame.Peca;
+import boardgame.Position;
 
 public abstract class PecaDeXadrez extends Peca {
 	
@@ -14,6 +15,11 @@ public abstract class PecaDeXadrez extends Peca {
 
 	public Color getColor() {
 		return color;
+	}
+	
+	protected boolean isThereOpponentPeca(Position position) {
+		PecaDeXadrez p = (PecaDeXadrez) getBoard().peca(position);
+		return p != null && p.getColor() != color;
 	}
 	
 	
