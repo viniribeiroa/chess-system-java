@@ -14,5 +14,10 @@ public class Peao extends PecaDeXadrez{
 	public String toString() {
 		return "P";
 	}
+	@Override
+	public boolean[][] possibleMoves() {
+		boolean[][] matriz = new boolean[getBoard().getLinhas()][getBoard().getColunas()];
+		return matriz;
+	}
 
 }

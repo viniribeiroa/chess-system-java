@@ -15,5 +15,10 @@ public class Cavalo extends PecaDeXadrez{
 	public String toString() {
 		return "C";
 	}
+	@Override
+	public boolean[][] possibleMoves() {
+		boolean[][] matriz = new boolean[getBoard().getLinhas()][getBoard().getColunas()];
+		return matriz;
+	}
 
 }

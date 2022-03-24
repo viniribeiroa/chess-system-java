@@ -15,5 +15,10 @@ public class Rainha extends PecaDeXadrez{
 	public String toString() {
 		return "Q";
 	}
+	@Override
+	public boolean[][] possibleMoves() {
+		boolean[][] matriz = new boolean[getBoard().getLinhas()][getBoard().getColunas()];
+		return matriz;
+	}
 
 }

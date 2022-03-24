@@ -49,6 +49,9 @@ public class PartidaDeXadrez {
 		if(!board.thereIsAPiece(position)) {
 			throw new ChessException("Posição não existe");
 		}
+		if(board.peca(position).isThereAnyPossibleMove()) {
+			throw new ChessException("não exite movimento possiveis para a peça escolhida");
+		}
 	}
 	
 	private void placeNewPiece(char coluna, int linha, PecaDeXadrez peca) {
