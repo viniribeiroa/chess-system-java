@@ -1,7 +1,8 @@
 package chess;
 
 import boardgame.Board;
-
+import boardgame.Peca;
+import boardgame.Position;
 import chess.pecas.Bispo;
 import chess.pecas.Cavalo;
 import chess.pecas.Rainha;
@@ -28,6 +29,28 @@ public class PartidaDeXadrez {
 		return matriz;
 	}
 	
+	public PecaDeXadrez performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+		Position source = sourcePosition.toPosition();
+		Position target = targetPosition.toPosition();
+		
+		ValidationSourcePosition(source);
+		Peca capturedPeca = makeMove(source, target);
+		return (PecaDeXadrez)capturedPeca;
+	}
+	
+	private Peca makeMove(Position source, Position target) {
+		Peca p = board.removePeca(source);
+		Peca capturadaPeca = board.removePeca(target);
+		board.placePeca(p, target);
+		return capturadaPeca;
+	}
+	
+	private void ValidationSourcePosition(Position position) {
+		if(!board.thereIsAPiece(position)) {
+			throw new ChessException("Posição não existe");
+		}
+	}
+	
 	private void placeNewPiece(char coluna, int linha, PecaDeXadrez peca) {
 		board.placePeca(peca, new ChessPosition(coluna, linha).toPosition());
 	}
@@ -47,8 +70,8 @@ public class PartidaDeXadrez {
 		placeNewPiece('f', 8, new  Bispo(board, Color.BLACK));
 		placeNewPiece('b', 1, new  Cavalo(board, Color.WHITE));
 		placeNewPiece('g', 1, new  Cavalo(board, Color.WHITE)); 
-		placeNewPiece('b', 8, new  Cavalo(board, Color.WHITE));
-		placeNewPiece('g', 8, new  Cavalo(board, Color.WHITE)); 
+		placeNewPiece('b', 8, new  Cavalo(board, Color.BLACK));
+		placeNewPiece('g', 8, new  Cavalo(board, Color.BLACK)); 
 
 	}	
 }
