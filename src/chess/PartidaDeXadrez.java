@@ -11,11 +11,24 @@ import chess.pecas.Torre;
 
 public class PartidaDeXadrez {
 	
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 	
 	public PartidaDeXadrez() {
 		board = new Board(8,8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
+		
 		initialSetup();
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 	
 	public PecaDeXadrez[][] getPecas(){
@@ -42,6 +55,7 @@ public class PartidaDeXadrez {
 		ValidationSourcePosition(source);
 		validationTargetPosition(source, target);
 		Peca capturedPeca = makeMove(source, target);
+		nextTurn();
 		return (PecaDeXadrez)capturedPeca;
 	}
 	
@@ -56,6 +70,9 @@ public class PartidaDeXadrez {
 		if(!board.thereIsAPiece(position)) {
 			throw new ChessException("Posição não existe");
 		}
+		if(currentPlayer != ((PecaDeXadrez)board.peca(position)).getColor()) {
+			throw new ChessException("é a vez de seu oponente");
+		}
 		if(board.peca(position).isThereAnyPossibleMove()) {
 			throw new ChessException("não exite movimento possiveis para a peça escolhida");
 		}
@@ -65,6 +82,12 @@ public class PartidaDeXadrez {
 		if(!board.peca(source).possibleMove(target)) {
 			throw new ChessException("A peça não pode se mexer para a possição escohida");
 		}
+	}
+	
+	private void nextTurn() {
+		
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
 	private void placeNewPiece(char coluna, int linha, PecaDeXadrez peca) {

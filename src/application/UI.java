@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import chess.ChessPosition;
 import chess.Color;
+import chess.PartidaDeXadrez;
 import chess.PecaDeXadrez;
 
 public class UI {
@@ -46,6 +47,13 @@ public class UI {
 		catch(RuntimeException e) {
 			throw new InputMismatchException("ERRO de entrada de dados");
 		}
+	}
+	
+	public static void printMatch(PartidaDeXadrez partidaDeXadrez) {
+		
+		PrintBoard(partidaDeXadrez.getPecas());
+		System.out.println("turno :" + partidaDeXadrez.getTurn());
+		System.out.println("Aguardando jogador das peças" + partidaDeXadrez.getCurrentPlayer());
 	}
 	
 	public static void PrintBoard(PecaDeXadrez[][] pecas) {
