@@ -60,9 +60,14 @@ public class UI {
 		System.out.println();
 		
 		System.out.println("turno :" + partidaDeXadrez.getTurn());
+		if(!partidaDeXadrez.getCheckMate()) {
 		System.out.println("Aguardando jogador das peças" + partidaDeXadrez.getCurrentPlayer());
 		if(partidaDeXadrez.getCheck()) {
 			System.out.println("CHECK!!!");
+		}
+		}else {
+			System.out.println("CHECKMATE");
+			System.out.println("vencedor: " + partidaDeXadrez.getCurrentPlayer());
 		}
 	}
 	
