@@ -61,6 +61,9 @@ public class UI {
 		
 		System.out.println("turno :" + partidaDeXadrez.getTurn());
 		System.out.println("Aguardando jogador das peças" + partidaDeXadrez.getCurrentPlayer());
+		if(partidaDeXadrez.getCheck()) {
+			System.out.println("CHECK!!!");
+		}
 	}
 	
 	public static void PrintBoard(PecaDeXadrez[][] pecas) {
@@ -117,7 +120,7 @@ public class UI {
 		System.out.print(ANSI_RESET);
 		System.out.print("BLACK: ");
 		System.out.print(ANSI_BLACK);
-		System.out.println(Arrays.toString(white.toArray()));
+		System.out.println(Arrays.toString(black.toArray()));
 		System.out.print(ANSI_RESET);
 	
 	}
