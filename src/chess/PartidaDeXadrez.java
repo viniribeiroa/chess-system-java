@@ -92,7 +92,7 @@ public class PartidaDeXadrez {
 	}
 
 	private Peca makeMove(Position source, Position target) {
-		PecaDeXadrez p =(PecaDeXadrez) board.removePeca(source);
+		PecaDeXadrez p = (PecaDeXadrez) board.removePeca(source);
 		p.increaseMoveCount();
 		Peca capturadaPeca = board.removePeca(target);
 		board.placePeca(p, target);
@@ -100,6 +100,27 @@ public class PartidaDeXadrez {
 		if (capturadaPeca != null) {
 			pecasNoTabuleiro.remove(capturadaPeca);
 			pecasCapturadas.add(capturadaPeca);
+		}
+
+		// jogada especial torre
+
+		if (p instanceof Rei && target.getColuna() == source.getColuna() + 2) {
+			Position sourceT = new Position(source.getLinha(), source.getColuna() + 3);
+			Position targetT = new Position(source.getLinha(), source.getColuna() + 1);
+
+			PecaDeXadrez torre = (PecaDeXadrez) board.removePeca(sourceT);
+			board.placePeca(torre, targetT);
+			torre.increaseMoveCount();
+		}
+		// jogada especial torre grande
+
+		if (p instanceof Rei && target.getColuna() == source.getColuna() - 2) {
+			Position sourceT = new Position(source.getLinha(), source.getColuna() - 4);
+			Position targetT = new Position(source.getLinha(), source.getColuna() - 1);
+
+			PecaDeXadrez torre = (PecaDeXadrez) board.removePeca(sourceT);
+			board.placePeca(torre, targetT);
+			torre.increaseMoveCount();
 		}
 		return capturadaPeca;
 	}
@@ -115,6 +136,27 @@ public class PartidaDeXadrez {
 			pecasCapturadas.remove(capturadaPeca);
 			pecasNoTabuleiro.add(capturadaPeca);
 
+		}
+
+		// jogada especial torre
+
+		if (p instanceof Rei && target.getColuna() == source.getColuna() + 2) {
+			Position sourceT = new Position(source.getLinha(), source.getColuna() + 3);
+			Position targetT = new Position(source.getLinha(), source.getColuna() + 1);
+
+			PecaDeXadrez torre = (PecaDeXadrez) board.removePeca(targetT);
+			board.placePeca(torre, sourceT);
+			torre.decreaseMoveCount();
+		}
+		// jogada especial torre grande
+
+		if (p instanceof Rei && target.getColuna() == source.getColuna() - 2) {
+			Position sourceT = new Position(source.getLinha(), source.getColuna() - 4);
+			Position targetT = new Position(source.getLinha(), source.getColuna() - 1);
+
+			PecaDeXadrez torre = (PecaDeXadrez) board.removePeca(targetT);
+			board.placePeca(torre, sourceT);
+			torre.decreaseMoveCount();
 		}
 	}
 
@@ -211,8 +253,8 @@ public class PartidaDeXadrez {
 		placeNewPiece('h', 1, new Torre(board, Color.WHITE));
 		placeNewPiece('h', 8, new Torre(board, Color.BLACK));
 		placeNewPiece('a', 8, new Torre(board, Color.BLACK));
-		placeNewPiece('e', 8, new Rei(board, Color.BLACK));
-		placeNewPiece('e', 1, new Rei(board, Color.WHITE));
+		placeNewPiece('e', 8, new Rei(board, Color.BLACK, this));
+		placeNewPiece('e', 1, new Rei(board, Color.WHITE, this));
 		placeNewPiece('d', 1, new Rainha(board, Color.WHITE));
 		placeNewPiece('d', 8, new Rainha(board, Color.BLACK));
 		placeNewPiece('c', 1, new Bispo(board, Color.WHITE));
