@@ -9,6 +9,7 @@ import boardgame.Peca;
 import boardgame.Position;
 import chess.pecas.Bispo;
 import chess.pecas.Cavalo;
+import chess.pecas.Peao;
 import chess.pecas.Rainha;
 import chess.pecas.Rei;
 import chess.pecas.Torre;
@@ -91,7 +92,8 @@ public class PartidaDeXadrez {
 	}
 
 	private Peca makeMove(Position source, Position target) {
-		Peca p = board.removePeca(source);
+		PecaDeXadrez p =(PecaDeXadrez) board.removePeca(source);
+		p.increaseMoveCount();
 		Peca capturadaPeca = board.removePeca(target);
 		board.placePeca(p, target);
 
@@ -104,7 +106,8 @@ public class PartidaDeXadrez {
 
 	private void undoMove(Position source, Position target, Peca capturadaPeca) {
 
-		Peca p = board.removePeca(target);
+		PecaDeXadrez p = (PecaDeXadrez) board.removePeca(target);
+		p.decreaseMoveCount();
 		board.placePeca(p, source);
 
 		if (capturadaPeca != null) {
@@ -220,6 +223,20 @@ public class PartidaDeXadrez {
 		placeNewPiece('g', 1, new Cavalo(board, Color.WHITE));
 		placeNewPiece('b', 8, new Cavalo(board, Color.BLACK));
 		placeNewPiece('g', 8, new Cavalo(board, Color.BLACK));
+		placeNewPiece('a', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('b', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('c', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('d', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('e', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('f', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('g', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('a', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('b', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('c', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('d', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('e', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('f', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('g', 2, new Peao(board, Color.WHITE));
 
 	}
 }
