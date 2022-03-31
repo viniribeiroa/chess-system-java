@@ -21,6 +21,7 @@ public class PartidaDeXadrez {
 	private Board board;
 	private boolean check;
 	private boolean checkMate;
+	private PecaDeXadrez enPassantVunerable;
 
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -47,6 +48,9 @@ public class PartidaDeXadrez {
 
 	public boolean getCheckMate() {
 		return checkMate;
+	}
+	public PecaDeXadrez enPassntVunerable() {
+		return enPassantVunerable;
 	}
 
 	public PecaDeXadrez[][] getPecas() {
@@ -79,6 +83,8 @@ public class PartidaDeXadrez {
 
 			throw new ChessException("Você não pode se colocar em check");
 		}
+		
+		PecaDeXadrez MovePeca = (PecaDeXadrez)board.peca(target);
 
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 
@@ -86,6 +92,14 @@ public class PartidaDeXadrez {
 			checkMate = true;
 		} else {
 			nextTurn();
+		}
+		
+		// especial movimento empassant
+		
+		if(MovePeca instanceof Peao && (target.getLinha() == source.getLinha() - 2 || target.getLinha() == source.getLinha() + 2)) {
+			enPassantVunerable = MovePeca;
+		}else {
+			enPassantVunerable = null;
 		}
 		return (PecaDeXadrez) capturedPeca;
 
@@ -121,6 +135,22 @@ public class PartidaDeXadrez {
 			PecaDeXadrez torre = (PecaDeXadrez) board.removePeca(sourceT);
 			board.placePeca(torre, targetT);
 			torre.increaseMoveCount();
+		}
+		// especial movimento enpassant
+		if(p instanceof Peao) {
+			if(source.getColuna() != target.getColuna() && capturadaPeca == null) {
+				Position peaoPosition;
+				if(p.getColor() == Color.WHITE) {
+					peaoPosition = new Position(target.getLinha() +1, target.getColuna());
+				}else {
+					peaoPosition = new Position(target.getLinha() -1, target.getColuna());
+				}
+				
+				capturadaPeca = board.removePeca(peaoPosition);
+				pecasCapturadas.add(capturadaPeca);
+				pecasNoTabuleiro.remove(capturadaPeca);
+				
+			}
 		}
 		return capturadaPeca;
 	}
@@ -158,6 +188,27 @@ public class PartidaDeXadrez {
 			board.placePeca(torre, sourceT);
 			torre.decreaseMoveCount();
 		}
+		
+		// especial movimento enpassant
+				if(p instanceof Peao) {
+					if(source.getColuna() != target.getColuna() && capturadaPeca == enPassantVunerable) {
+						
+						PecaDeXadrez peao = (PecaDeXadrez)board.removePeca(target);
+						Position peaoPosition;
+						if(p.getColor() == Color.WHITE) {
+							peaoPosition = new Position(3, target.getColuna());
+						}else {
+							peaoPosition = new Position(4, target.getColuna());
+						}
+						
+						board.placePeca(peao, peaoPosition);
+						
+						capturadaPeca = board.removePeca(peaoPosition);
+						pecasCapturadas.add(capturadaPeca);
+						pecasNoTabuleiro.remove(capturadaPeca);
+						
+					}
+				}
 	}
 
 	private void ValidationSourcePosition(Position position) {
@@ -265,20 +316,20 @@ public class PartidaDeXadrez {
 		placeNewPiece('g', 1, new Cavalo(board, Color.WHITE));
 		placeNewPiece('b', 8, new Cavalo(board, Color.BLACK));
 		placeNewPiece('g', 8, new Cavalo(board, Color.BLACK));
-		placeNewPiece('a', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('b', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('c', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('d', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('e', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('f', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('g', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('a', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('b', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('c', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('d', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('e', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('f', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('g', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('a', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('b', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('c', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('d', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('e', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('f', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('g', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('a', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('b', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('c', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('d', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('e', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('f', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('g', 2, new Peao(board, Color.WHITE, this));
 
 	}
 }
