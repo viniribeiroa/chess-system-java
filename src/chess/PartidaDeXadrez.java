@@ -1,5 +1,6 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class PartidaDeXadrez {
 	private boolean check;
 	private boolean checkMate;
 	private PecaDeXadrez enPassantVunerable;
+	private PecaDeXadrez promocao;
 
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -51,6 +53,10 @@ public class PartidaDeXadrez {
 	}
 	public PecaDeXadrez enPassntVunerable() {
 		return enPassantVunerable;
+	}
+	
+	public PecaDeXadrez getPromocao() {
+		return promocao;
 	}
 
 	public PecaDeXadrez[][] getPecas() {
@@ -85,6 +91,15 @@ public class PartidaDeXadrez {
 		}
 		
 		PecaDeXadrez MovePeca = (PecaDeXadrez)board.peca(target);
+		
+		// especial move promocao
+		promocao = null;
+		if(MovePeca instanceof Peao) {
+			if((MovePeca.getColor() == Color.WHITE && target.getLinha() == 0) || (MovePeca.getColor() == Color.BLACK && target.getLinha() == 7)) {
+				promocao = (PecaDeXadrez)board.peca(target);
+				promocao = replacePromocaoPeca("Q");
+			}
+		}
 
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 
@@ -103,6 +118,32 @@ public class PartidaDeXadrez {
 		}
 		return (PecaDeXadrez) capturedPeca;
 
+	}
+	
+	public PecaDeXadrez replacePromocaoPeca(String type) {
+		if(promocao == null) {
+			throw new IllegalStateException("Não peça a ser promovida");
+			
+		}
+		if(!type.equals("B") && !type.equals("C") && !type.equals("T") && !type.equals("Q")) {
+			throw new InvalidParameterException("paramentro invalido");
+		}
+		
+		Position posicao = promocao.getChessPosition().toPosition();
+		Peca p = board.removePeca(posicao);
+		pecasNoTabuleiro.remove(p);
+		PecaDeXadrez newPeca = newPeca(type, promocao.getColor());
+		board.placePeca(newPeca, posicao);
+		pecasNoTabuleiro.add(newPeca);
+		
+		return newPeca;
+	}
+	
+	private PecaDeXadrez newPeca(String type , Color color) {
+		if(type.equals("B")) return new Bispo(board, color);
+		if(type.equals("C")) return new Cavalo(board, color);
+		if(type.equals("T")) return new Torre(board, color);
+		return new Rainha(board, color);
 	}
 
 	private Peca makeMove(Position source, Position target) {

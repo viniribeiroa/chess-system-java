@@ -40,6 +40,12 @@ public class Program {
 				if(capturadaPeca != null) {
 					captured.add(capturadaPeca);
 				}
+				
+				if(partidadexadrez.getPromocao() != null) {
+					System.out.print("entre como um caractere da peca de sua escolha ");
+					String type = sc.nextLine();
+					partidadexadrez.replacePromocaoPeca(type);
+				}
 			}
 			catch(ChessException e) {
 				System.out.println(e.getMessage());
